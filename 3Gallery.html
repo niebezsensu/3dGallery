@@ -1,0 +1,240 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<link rel="stylesheet" href="css/3gallery.css" type="text/css"/>
+
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+/*			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			cube.position.x = -3;*/
+			//scene.add( cube );
+/*
+var cube2 = new THREE.Mesh( geometry, material );
+//cube2.rotation.y = -2;
+cube2.position.x = -3;
+cube2.position.z = -3;
+
+scene.add(cube2);*/
+			camera.position.z = 12;
+			camera.position.y = 3.5;
+
+			const DIF = 0.02;
+			const WI = 2.5;
+			const HI = 2.2;
+
+			//var fog = new THREE.Fog(0x0000ff, 100, 800);
+
+			var map1 = THREE.ImageUtils.loadTexture('img/1.jpg');
+			var map2 = THREE.ImageUtils.loadTexture('img/2.jpg');
+			var map3 = THREE.ImageUtils.loadTexture('img/3.jpg');
+			var map4 = THREE.ImageUtils.loadTexture('img/4.jpg');
+			var map5 = THREE.ImageUtils.loadTexture('img/5.jpg');
+			var map6 = THREE.ImageUtils.loadTexture('img/6.jpg');
+			var map7 = THREE.ImageUtils.loadTexture('img/7.jpg');
+			var map8 = THREE.ImageUtils.loadTexture('img/8.jpg');
+			var map9 = THREE.ImageUtils.loadTexture('img/9.jpg');
+
+			var img1 = new THREE.MeshBasicMaterial({ map:map1, needsUpdate: true});
+			var img2 = new THREE.MeshBasicMaterial({ map:map2, needsUpdate: true});
+			var img3 = new THREE.MeshBasicMaterial({ map:map3, needsUpdate: true});
+			var img4 = new THREE.MeshBasicMaterial({ map:map4, needsUpdate: true});
+			var img5 = new THREE.MeshBasicMaterial({ map:map5, needsUpdate: true});
+			var img6 = new THREE.MeshBasicMaterial({ map:map6, needsUpdate: true});
+			var img7 = new THREE.MeshBasicMaterial({ map:map7, needsUpdate: true});
+			var img8 = new THREE.MeshBasicMaterial({ map:map8, needsUpdate: true});
+			var img9 = new THREE.MeshBasicMaterial({ map:map9, needsUpdate: true});
+
+			var plane1 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img1);
+			var plane2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img2);
+			var plane3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img3);
+			var plane4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img4);
+			var plane5 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img5);
+			var plane6 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img6);
+			var plane7 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img7);
+			var plane8 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img8);
+			var plane9 = new THREE.Mesh(new THREE.PlaneBufferGeometry(WI, HI),img9);
+
+		    //plane.overdraw = true;
+		    plane1.position.x = 6;
+		    plane1.position.z = 0;
+
+		    plane2.position.x = 4.566;
+		    plane2.position.z = 3.892;
+
+		    plane3.position.x = 0.948;
+		    plane3.position.z = 5.924;
+
+		    plane4.position.x = -3.122;
+		    plane4.position.z = 5.124;
+
+		    plane5.position.x = -5.700;
+		    plane5.position.z = 1.872;
+
+		    plane6.position.x = -5.552;
+		    plane6.position.z = -2.274;
+
+		    plane7.position.x = -2.750;
+		    plane7.position.z = -5.332;
+
+		    plane8.position.x = 1.368;
+		    plane8.position.z = -5.842;
+
+		    plane9.position.x = 4.830;
+		    plane9.position.z = -3.558;
+
+		    scene.add(plane1);
+		    scene.add(plane2);
+		    scene.add(plane3);
+		    scene.add(plane4);
+		    scene.add(plane5);
+		    scene.add(plane6);
+		    scene.add(plane7);
+		    scene.add(plane8);
+		    scene.add(plane9);
+
+		    scene.fog = new THREE.FogExp2( 0x111111, 0.05 );
+
+/*		    var radius   = 3,
+		    segments = 64,
+		    material = new THREE.LineBasicMaterial( { color: 0x0000ff } ),
+		    geometry = new THREE.CircleGeometry( radius, segments );
+
+			// Remove center vertex
+			geometry.vertices.shift();*/
+
+			//scene.add( new THREE.Line( geometry, material ) );
+
+			const SPEED0 = window.innerWidth/2;
+
+			var mouse = {x: 0};
+
+			document.addEventListener('mousemove', function(e){ 
+			    mouse.x = e.clientX || e.pageX; 
+			}, false);
+
+			plane1.addEventListener('mousedown', function(event){
+				event.target.scale.x = 2;
+				event.target.scale.y = 2;
+			}, false);
+
+
+
+			//var spinner_obj = new THREE.Object3D();
+
+
+				//THREE.EventDispatcher.call( plane1 );
+				//plane1.dispatchEvent({type:'mousedown'});
+
+			    var getElementPosition = function(element) {
+		        var top = left = 0;
+		        do {
+		            top  += element.offsetTop  || 0;
+		            left += element.offsetLeft || 0;
+		            element =  element.offsetParent;
+		        }
+		        while (element);
+		        return {top: top, left: left};
+		    }
+
+		    var imArray = [plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9];
+
+var raf;
+var clicked = false;
+			//var projector = new THREE.Projector();
+		    renderer.domElement.addEventListener('click', function(e){
+		        var mouseX = e.clientX - getElementPosition(renderer.domElement).left;
+		        var mouseY = e.clientY - getElementPosition(renderer.domElement).top;
+		        var x =   (mouseX / renderer.domElement.width) * 2 - 1;
+		        var y = - (mouseY / renderer.domElement.height) * 2 + 1;
+		        var vector = new THREE.Vector3(x, y, 1);
+		        //projector.unprojectVector(vector, camera);
+		        vector.unproject(camera);
+		    
+		        var ray = new THREE.Ray(camera.position, vector.sub(camera.position).normalize());
+		        //var intersects = ray.intersectPlane(plane1);
+		    
+		    //if(intersects){
+		  /*  var color = Math.random() * 0xffffff;
+		            plane1.material.color.setHex( color );*/
+
+				/*plane1.scale.x = 2;
+				plane1.scale.y = 2;
+				plane1.position.y = 1;*/
+				if(raf != null) {
+					if(!clicked){
+						cancelAnimationFrame( raf );
+						clicked = true;
+					}
+					else{
+						requestAnimationFrame(render);
+						clicked = false;
+				/*
+						plane1.scale.x = 0.5;
+								plane1.scale.y = 0.5;
+								plane1.position.y = 0;*/
+					}
+				}
+
+		/*        if(intersects.length > 0){
+		            console.log(intersects[ 0 ].object);
+		            var color = Math.random() * 0xffffff;
+		            intersects[ 0 ].object.material.color.setHex( color );
+		        }*/
+		        //renderer.render( scene, camera );
+		    }, false);
+
+			var render = function () {
+				camera.lookAt( scene.position );
+				raf = requestAnimationFrame( render );
+
+				var speed = (mouse.x - SPEED0) * 0.00005;
+
+				scene.rotation.y += speed;
+
+				plane1.rotation.y -= speed;
+				plane2.rotation.y -= speed;
+				plane3.rotation.y -= speed;
+				plane4.rotation.y -= speed;
+				plane5.rotation.y -= speed;
+				plane6.rotation.y -= speed;
+				plane7.rotation.y -= speed;
+				plane8.rotation.y -= speed;
+				plane9.rotation.y -= speed;
+
+/*
+				if(clicked){
+					plane1.scale.x += 0.2;
+				plane1.scale.y += 2;
+				plane1.position.y = 1;
+				}*/
+
+
+
+				renderer.render(scene, camera);
+
+				
+
+/*				console.log("speed: "+speed);
+console.log("od: "+(SPEED0-100)* 0.00005);
+console.log("do: "+(SPEED0+100)* 0.00005);
+				if((speed > (SPEED0-100)* 0.00005) && (speed < (SPEED0+100)* 0.00005))
+				{
+					cancelAnimationFrame( raf );
+				}*/
+			};
+
+			render();
+		</script>
+	</body>
+</html>
